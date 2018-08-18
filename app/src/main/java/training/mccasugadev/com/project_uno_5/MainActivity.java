@@ -1,7 +1,7 @@
 package training.mccasugadev.com.project_uno_5;
 
 import android.content.Context;
-import android.icu.util.Output;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText username;
     EditText password;
-    Button loginButton;
+    Button loginButton, registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +37,20 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.passwordPassword);
 
         loginButton = findViewById(R.id.loginButton);
+        registerButton = findViewById(R.id.registerButton);
 
+        // Set event handlers upon button clicks
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onLogin(v);
+            }
+        });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToRegistration = new Intent(getApplicationContext(), Register.class);
+                startActivity(goToRegistration);
             }
         });
     }
@@ -51,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
         String login_password = password.getText().toString();
         String login_type = "login";
 
-        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-        backgroundWorker.execute(login_username, login_password, login_type);
+        BackgroundWorkerLogin backgroundWorkerLogin = new BackgroundWorkerLogin(this);
+        backgroundWorkerLogin.execute(login_username, login_password, login_type);
     }
 
-    private class BackgroundWorker extends AsyncTask<String, Void, String> {
+    private class BackgroundWorkerLogin extends AsyncTask<String, Void, String> {
         Context context;
         AlertDialog alertDialog;
-        public BackgroundWorker(Context context) {
+        public BackgroundWorkerLogin(Context context) {
             this.context = context;
         }
 
@@ -113,9 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if (type.equals("login")) {
-
-            }
             return "";
         }
 
